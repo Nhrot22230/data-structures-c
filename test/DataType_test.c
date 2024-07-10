@@ -24,6 +24,11 @@ void DataType_test_all() {
   printf("All tests passed successfully.\n");
 }
 
+int main(){
+  DataType_test_all();
+  return 0;
+}
+
 void test_print_functions() {
   char c = 'a';
   int i = 42;

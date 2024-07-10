@@ -28,6 +28,11 @@ void DynArr_test_all() {
   printf("All dynamic array tests passed successfully.\n");
 }
 
+int main() {
+  DynArr_test_all();
+  return 0;
+}
+
 void test_DynArr_init() {
   struct DynArr dynArr;
   assert(DynArr_init(&dynArr, 5, DT_INT) == 0);
