@@ -1,0 +1,54 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I./include",
+      "-o",
+      "./build/DataType.o",
+      "./src/DataType.c"
+    ],
+    "directory": "/home/nhrot/Programming/C_Cpp/data-structures-c",
+    "file": "/home/nhrot/Programming/C_Cpp/data-structures-c/src/DataType.c",
+    "output": "/home/nhrot/Programming/C_Cpp/data-structures-c/build/DataType.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I./include",
+      "-o",
+      "./build/DynamicArray.o",
+      "./src/DynamicArray.c"
+    ],
+    "directory": "/home/nhrot/Programming/C_Cpp/data-structures-c",
+    "file": "/home/nhrot/Programming/C_Cpp/data-structures-c/src/DynamicArray.c",
+    "output": "/home/nhrot/Programming/C_Cpp/data-structures-c/build/DynamicArray.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I./include",
+      "-o",
+      "./build/List.o",
+      "./src/List.c"
+    ],
+    "directory": "/home/nhrot/Programming/C_Cpp/data-structures-c",
+    "file": "/home/nhrot/Programming/C_Cpp/data-structures-c/src/List.c",
+    "output": "/home/nhrot/Programming/C_Cpp/data-structures-c/build/List.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I./include",
+      "-o",
+      "./build/Node.o",
+      "./src/Node.c"
+    ],
+    "directory": "/home/nhrot/Programming/C_Cpp/data-structures-c",
+    "file": "/home/nhrot/Programming/C_Cpp/data-structures-c/src/Node.c",
+    "output": "/home/nhrot/Programming/C_Cpp/data-structures-c/build/Node.o"
+  }
+]
