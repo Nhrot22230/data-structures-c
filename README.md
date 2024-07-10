@@ -52,19 +52,111 @@ This repository includes implementations of various data structures such as dyna
 
 ## How to Use
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/data-structures-c.git
-   cd data-structures-c
-   ```
-2. Build the project:
-   ```sh
-   ./compile.sh
-   ```
-3. Run the tests:
-   ```sh
-   ./runTest.sh
-   ```
+This section explains how to use the data structures library in your own projects.
+
+### Step 1: Clone the Repository
+
+First, clone the repository to get access to the source code, headers, and pre-built libraries.
+
+```sh
+git clone https://github.com/yourusername/data-structures-c.git
+cd data-structures-c
+```
+
+### Step 2: Build the Library
+
+You can choose to build either a static or shared library.
+
+#### Build Static Library
+
+```sh
+./compile.sh
+```
+
+#### Build Shared Library
+
+```sh
+./compile.sh --shared
+```
+
+### Step 3: Copy Header and Library Files
+
+Copy the header files from the `include` directory and the library files from the `lib` directory to your project's directory.
+
+#### Copy Header Files
+
+```sh
+cp -r include /path/to/your/project
+```
+
+#### Copy Static Library
+
+```sh
+cp lib/libdata_structures.a /path/to/your/project/lib
+```
+
+#### Copy Shared Library
+
+```sh
+cp lib/libdata_structures.so /path/to/your/project/lib
+```
+
+### Step 4: Compile Your Project
+
+To compile your project using the data structures library, you need to specify the paths to the header files and the library. Here is an example using `gcc`:
+
+#### Using Static Library
+
+```sh
+gcc -o my_project main.c -I/path/to/your/project/include -L/path/to/your/project/lib -ldata_structures
+```
+
+#### Using Shared Library
+
+```sh
+gcc -o my_project main.c -I/path/to/your/project/include -L/path/to/your/project/lib -ldata_structures -Wl,-rpath,/path/to/your/project/lib
+```
+
+### Example Project Structure
+
+Here is an example of how your project directory might look after copying the necessary files:
+
+```
+my_project/
+├── include/
+│   ├── DataType.h
+│   ├── DynamicArray.h
+│   ├── List.h
+│   └── Node.h
+├── lib/
+│   ├── libdata_structures.a  # or libdata_structures.so
+├── src/
+│   └── main.c
+└── Makefile  # Optional, for automated build process
+```
+
+### Example `main.c`
+
+Here is a simple example of what your `main.c` might look like:
+
+```c
+#include "DynamicArray.h"
+#include "DataType.h"
+#include <stdio.h>
+
+int main() {
+    struct DynArr dynArr;
+    DynArr_init(&dynArr, 0, DT_INT);
+
+    int value = 42;
+    DynArr_pushback(&dynArr, &value);
+
+    printf("Value in dynamic array: %d\n", *(int *)DynArr_dataAt(&dynArr, 0));
+
+    DynArr_clear(&dynArr);
+    return 0;
+}
+```
 
 ## Contributing
 
