@@ -1,49 +1,6 @@
-#include "data_structures.h"
+#include "List.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-/* 
- * ====================================================================
- * Node Functions
- * ====================================================================
-*/
-
-struct Node *Node_create(void *data, enum DataType dtype) {
-  struct Node *node = malloc(sizeof(struct Node));
-  Node_init(node, data, dtype);
-  return node;
-}
-
-
-void Node_init(struct Node *node, void *data, enum DataType dtype) {
-  node->dtype = dtype;
-  node->dtype_size = DataType_size(dtype);
-  node->elem = malloc(node->dtype_size);
-  DataType_assign(dtype, node->elem, data);
-  node->next = NULL;
-  node->dtype = dtype;
-}
-
-void Node_free(struct Node *node) {
-  printf("Node free is called on: %p\n", node);
-  if (node->elem != NULL) free(node->elem);
-  if (node->next != NULL) {
-    Node_free(node->next);
-    free(node->next);
-  }
-  
-  node->next = NULL;
-  node->elem = NULL;
-}
-
-void Node_print(struct Node *node) {
-  PrintFunc print = DataType_get_print_func(node->dtype);
-  printf("Node info:\n");
-  printf("Addres     : %p\n", node);
-  printf("Next       : %p\n", node->next);
-  printf("Elem as ptr: %p\n", node->elem);
-  printf("Elem       :"); print(node->elem); printf("\n");
-}
 
 void List_init(struct List *list, enum DataType dtype){
   list->len = 0;
@@ -80,6 +37,38 @@ void List_insert(struct List *list, void *data, unsigned long idx) {
     node->next = curr;
   }
   list->len++;
+}
+
+
+void List_erase(struct List *list, unsigned long idx) {
+  if (list->head == NULL) return;
+  if (list->len == 0) return;
+  struct Node *aux = NULL;
+  if (idx == 0) {
+    struct Node *aux = list->head;
+    list->head = list->head->next;
+    if (aux == list->tail) list->tail = NULL;
+  }
+  else {
+    struct Node *prev = NULL;
+    struct Node *curr = list->head;
+    for(unsigned long i = 0; i < idx; ++i) {
+      if (i == idx){
+        prev->next = curr->next;
+        if(curr == list->tail) list->tail = prev;
+        break;
+      }
+      aux = curr;
+      prev = curr;
+      curr = curr->next;
+    }
+  }
+
+  
+  if (aux == NULL) return;
+  aux->next = NULL;
+  Node_free(aux);
+  free(aux);
 }
 
 

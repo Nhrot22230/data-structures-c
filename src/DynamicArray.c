@@ -260,12 +260,30 @@ int DynArr_clear_custom(struct DynArr *dynArr, CustomFunc freeFunc) {
   if (dynArr->dtype != DT_CUSTOM) return -1;
   if (dynArr->arr == NULL) return -2;
 
-  void *i_ptr = NULL;
-  for (unsigned int i=0; i < dynArr->size; ++i) {
-    i_ptr = (char *)dynArr->arr + i*dynArr->dtype_size;
-    CustomFunc(i_ptr);
+  if (freeFunc != NULL) {
+    void *i_ptr = NULL;
+    for (unsigned int i=0; i < dynArr->size; ++i) {
+      i_ptr = (char *)dynArr->arr + i*dynArr->dtype_size;
+      freeFunc(i_ptr);
+    }
   }
+  
   free(dynArr->arr);
   dynArr->arr = NULL;
   return 0;
 }
+
+
+void DynArr_print_custom(struct DynArr *dynArr, CustomFunc printFunc) {
+  if (dynArr->dtype != DT_CUSTOM) return;
+  if (dynArr->capacity == 0) return;
+
+  void *i_ptr = NULL;
+  for (unsigned long i = 0; i < dynArr->size; ++i) {
+    i_ptr = (char *)dynArr->arr + i*dynArr->dtype_size;
+    printFunc(i_ptr);
+  }
+  printf("\n");
+}
+
+

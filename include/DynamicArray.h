@@ -10,6 +10,7 @@ struct DynArr {
   unsigned long capacity;
 };
 
+
 int DynArr_init(struct DynArr *dynArr, unsigned long initialSize, enum DataType dataType);
 int DynArr_clear(struct DynArr *dynArr);
 int DynArr_expand(struct DynArr *dynArr, unsigned long cap);

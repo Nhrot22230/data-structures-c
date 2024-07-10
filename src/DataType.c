@@ -38,47 +38,66 @@ void print_unsigned_long(void *data) {
 int cmp_char(void *i_ptr, void *j_ptr) {
   char a = *(char *)i_ptr;
   char b = *(char *)j_ptr;
-
-  return (a - b);
+  
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
 
 int cmp_int(void *i_ptr, void *j_ptr) {
   int a = *(int *)i_ptr;
   int b = *(int *)j_ptr;
 
-  return (a - b);
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
-
+ 
 int cmp_float(void *i_ptr, void *j_ptr) {
   float a = *(float *)i_ptr;
   float b = *(float *)j_ptr;
 
-  return (a - b);
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
+
 int cmp_long(void *i_ptr, void *j_ptr) {
   long a = *(long *)i_ptr;
   long b = *(long *)j_ptr;
 
-  return (a - b);
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
+
 int cmp_double(void *i_ptr, void *j_ptr) {
   double a = *(double *)i_ptr;
   double b = *(double *)j_ptr;
 
-  return (a - b);
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
+
 int cmp_unsigned_int(void *i_ptr, void *j_ptr) {
   unsigned int a = *(unsigned int *)i_ptr;
   unsigned int b = *(unsigned int *)j_ptr;
 
-  return (a - b);
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
+
 int cmp_unsigned_long(void *i_ptr, void *j_ptr) {
   unsigned long a = *(unsigned long *)i_ptr;
   unsigned long b = *(unsigned long *)j_ptr;
 
-  return (a - b);
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
 }
+
 
 PrintFunc DataType_get_print_func(enum DataType dtype) {
   switch (dtype) {
