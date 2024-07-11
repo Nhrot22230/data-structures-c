@@ -1,6 +1,18 @@
 #ifndef DATATYPE_H
 #define DATATYPE_H
 
+#define GENERATE_ASSIGN_WRAPPER(wrapper_name, func_name, type) \
+void wrapper_name(void *a, void *b) {                   \
+    func_name((type *)a, (type *)b);                    \
+}
+
+#define GENERATE_WRAPPER(wrapper_name, func_name, type) \
+void wrapper_name(void *a) {                   \
+    func_name((type *)a);                    \
+}
+
+
+
 enum DataType {
   DT_CUSTOM = 1,
   DT_CHAR,
@@ -14,7 +26,7 @@ enum DataType {
 
 typedef void (*PrintFunc)(void *);
 typedef int  (*CmpFunc)(void *, void *);
-typedef int  (*CustomFunc)(void *);
+typedef void (*CustomFunc)(void *);
 typedef void (*AssignFunc)(void *, void *);
 
 PrintFunc DataType_get_print_func(enum DataType dtype);

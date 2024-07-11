@@ -1,6 +1,9 @@
+
 #include "DynamicArray.h"
 #include "DataType.h"
+#include "Node.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 
 // Function prototypes for the test functions
@@ -14,6 +17,14 @@ void test_DynArr_dataAt();
 void test_DynArr_print();
 void test_DynArr_sort();
 
+void test_DynArr_init_custom();
+void test_DynArr_clear_custom();
+void test_DynArr_pushback_custom();
+void test_DynArr_insertAt_custom();
+void test_DynArr_popback_custom();
+void test_DynArr_dataAt_custom();
+void test_DynArr_print_custom();
+
 void DynArr_test_all() {
   test_DynArr_init();
   test_DynArr_clear();
@@ -25,6 +36,13 @@ void DynArr_test_all() {
   test_DynArr_print();
   test_DynArr_sort();
 
+  test_DynArr_init_custom();
+  test_DynArr_clear_custom();
+  test_DynArr_pushback_custom();
+  test_DynArr_insertAt_custom();
+  test_DynArr_popback_custom();
+  test_DynArr_dataAt_custom();
+  test_DynArr_print_custom();
   printf("All dynamic array tests passed successfully.\n");
 }
 
@@ -117,7 +135,7 @@ void test_DynArr_print() {
   DynArr_init(&dynArr, 3, DT_INT);
   int values[] = {1, 2, 3};
   for (int i = 0; i < 3; i++) {
-      DynArr_insertAt(&dynArr, &values[i], i);
+    DynArr_insertAt(&dynArr, &values[i], i);
   }
   printf("Expected output: 1 2 3\nActual output: ");
   DynArr_print(&dynArr);
@@ -131,7 +149,7 @@ void test_DynArr_sort() {
   DynArr_init(&dynArr, 5, DT_INT);
   int values[] = {5, 3, 4, 1, 2};
   for (int i = 0; i < 5; i++) {
-      DynArr_insertAt(&dynArr, &values[i], i);
+    DynArr_insertAt(&dynArr, &values[i], i);
   }
   DynArr_sort(&dynArr, 0, dynArr.size - 1, NULL);
   printf("Expected output: 1 2 3 4 5\nActual output: ");
@@ -141,3 +159,114 @@ void test_DynArr_sort() {
   printf("DynArr_sort tested successfully.\n");
 }
 
+/* ====================================================================
+* Custom Dynamic Array Tests
+* ===================================================================
+* */
+
+GENERATE_ASSIGN_WRAPPER(wrapper_assign, Node_copy, struct Node)
+GENERATE_WRAPPER(wrapper_free, Node_free, struct Node)
+GENERATE_WRAPPER(wrapper_print, Node_print, struct Node)
+
+void test_DynArr_init_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 10, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 1;
+  Node_init(&node, &num, DT_INT);
+  DynArr_insertAt_custom(&dynArr, &node, 0, wrapper_assign);
+  num = 15;
+  Node_setElem(&node, &num);
+  struct Node inserted = *(struct Node *) DynArr_dataAt(&dynArr, 0);
+  int valA = *(int *)node.elem;
+  int valB = *(int *)inserted.elem;
+  assert(valB == 1);
+  assert(valA == 15);
+  DynArr_clear_custom(&dynArr, wrapper_free);
+  Node_free(&node);
+  printf("DynArr_init_custom tested successfully.\n");
+}
+
+void test_DynArr_clear_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 10, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 1;
+  Node_init(&node, &num, DT_INT);
+  DynArr_insertAt_custom(&dynArr, &node, 0, wrapper_assign);
+  assert(DynArr_clear_custom(&dynArr, wrapper_free) == 0);
+  Node_free(&node);
+  printf("DynArr_clear_custom tested successfully.\n");
+}
+
+void test_DynArr_pushback_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 0, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 1;
+  Node_init(&node, &num, DT_INT);
+  assert(DynArr_pushback_custom(&dynArr, &node, wrapper_assign) == 0);
+  assert(dynArr.size == 1);
+  assert(*(int *)((struct Node *)DynArr_dataAt(&dynArr, 0))->elem == 1);
+  DynArr_clear_custom(&dynArr, wrapper_free);
+  Node_free(&node);
+  printf("DynArr_pushback_custom tested successfully.\n");
+}
+
+void test_DynArr_insertAt_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 5, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 42;
+  Node_init(&node, &num, DT_INT);
+  assert(DynArr_insertAt_custom(&dynArr, &node, 2, wrapper_assign) == 0);
+  assert(*(int *)((struct Node *)DynArr_dataAt(&dynArr, 2))->elem == 42);
+  DynArr_clear_custom(&dynArr, wrapper_free);
+  Node_free(&node);
+  printf("DynArr_insertAt_custom tested successfully.\n");
+}
+
+void test_DynArr_popback_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 1, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 42;
+  Node_init(&node, &num, DT_INT);
+  DynArr_pushback_custom(&dynArr, &node, wrapper_assign);
+  assert(DynArr_popback_custom(&dynArr, wrapper_free, wrapper_assign) == 0);
+  assert(dynArr.size == 1);  // The initial size was 1
+  DynArr_clear_custom(&dynArr, wrapper_free);
+  Node_free(&node);
+  printf("DynArr_popback_custom tested successfully.\n");
+}
+
+void test_DynArr_dataAt_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 5, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 42;
+  Node_init(&node, &num, DT_INT);
+  DynArr_insertAt_custom(&dynArr, &node, 2, wrapper_assign);
+  assert(*(int *)((struct Node *)DynArr_dataAt(&dynArr, 2))->elem == 42);
+  DynArr_clear_custom(&dynArr, wrapper_free);
+  Node_free(&node);
+  printf("DynArr_dataAt_custom tested successfully.\n");
+}
+
+void test_DynArr_print_custom() {
+  struct DynArr dynArr;
+  assert(DynArr_init_custom(&dynArr, 3, sizeof(struct Node)) == 0);
+  struct Node node;
+  int num = 0;
+  Node_init(&node, &num, DT_INT);
+  int values[] = {1, 2, 3};
+  for (int i = 0; i < 3; i++) {
+    Node_setElem(&node, &values[i]);
+    DynArr_insertAt_custom(&dynArr, &node, i, wrapper_assign);
+  }
+  printf("Expected output: 1 2 3\nActual output: ");
+  DynArr_print_custom(&dynArr, wrapper_print);
+  DynArr_clear_custom(&dynArr, wrapper_free);
+  Node_free(&node);
+  printf("DynArr_print_custom tested successfully.\n");
+}

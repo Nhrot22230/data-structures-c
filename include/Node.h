@@ -10,8 +10,10 @@ struct Node {
 };
 
 void Node_init(struct Node *node, void *data, enum DataType dtype);
+void Node_copy(struct Node *dest, struct Node *src);
+void Node_setElem(struct Node *node, void *data);
 void Node_free(struct Node *node);
-struct Node *Node_create(void *data, enum DataType dtype);
+struct Node *Node_create();
 void Node_print(struct Node *node);
 
 #endif//NODE_H

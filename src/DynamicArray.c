@@ -45,6 +45,7 @@ int DynArr_expand(struct DynArr *dynArr, unsigned long cap){
   unsigned long to_alloc = dynArr->dtype_size * cap;
   void *aux = malloc(to_alloc);
   if (aux == NULL) return -3;
+  memset(aux, 0, to_alloc);
 
   void *i_ptr = NULL, *j_ptr = NULL;
   for (unsigned long i = 0; i < dynArr->size && i < cap; ++i) {
@@ -124,7 +125,7 @@ int DynArr_popback(struct DynArr *dynArr) {
   return 0;
 }
 
-const void *DynArr_dataAt(struct DynArr *dynArr, unsigned long idx) {
+void *DynArr_dataAt(struct DynArr *dynArr, unsigned long idx) {
   if(dynArr->capacity == 0 || dynArr->size == 0) return NULL;
   if(idx > dynArr->size) return NULL;
 
@@ -245,6 +246,29 @@ int DynArr_init_custom(struct DynArr *dynArr, unsigned long initialSize, unsigne
   return 0;
 }
 
+int DynArr_expand_custom(struct DynArr *dynArr, unsigned long cap, AssignFunc assignFunc){
+  printf("DynArr_expand_custom...\n");
+  if (dynArr->capacity == 0) return -2;
+
+  unsigned long to_alloc = dynArr->dtype_size * cap;
+  void *aux = malloc(to_alloc);
+  if (aux == NULL) return -3;
+  memset(aux, 0, to_alloc);
+
+  void *i_ptr = NULL, *j_ptr = NULL;
+  for (unsigned long i = 0; i < dynArr->size && i < cap; ++i) {
+    i_ptr = (char *)dynArr->arr + i*dynArr->dtype_size;
+    j_ptr = (char *)aux + i*dynArr->dtype_size;
+    assignFunc(i_ptr, j_ptr);
+  }
+
+  free(dynArr->arr);
+  dynArr->arr = aux;
+  dynArr->capacity = cap;
+  return 0;
+}
+
+
 int DynArr_insertAt_custom(struct DynArr *dynArr, void *data, unsigned long idx, 
     AssignFunc assignFunc) {
   if (dynArr->dtype != DT_CUSTOM) return -1;
@@ -273,7 +297,6 @@ int DynArr_clear_custom(struct DynArr *dynArr, CustomFunc freeFunc) {
   return 0;
 }
 
-
 void DynArr_print_custom(struct DynArr *dynArr, CustomFunc printFunc) {
   if (dynArr->dtype != DT_CUSTOM) return;
   if (dynArr->capacity == 0) return;
@@ -284,6 +307,38 @@ void DynArr_print_custom(struct DynArr *dynArr, CustomFunc printFunc) {
     printFunc(i_ptr);
   }
   printf("\n");
+}
+
+
+int DynArr_pushback_custom(struct DynArr *dynArr, void *data, AssignFunc assignFunc) {
+  printf("DynArr_pushback_custom...\n");
+  if (dynArr->dtype != DT_CUSTOM) return -1;
+  if (dynArr->capacity == 0) return -2;
+
+  unsigned long idx = dynArr->size;
+  if (dynArr->size + 1 == dynArr->capacity && 
+      DynArr_expand_custom(dynArr, dynArr->capacity * 2, assignFunc) < 0) return -3;
+
+  void *element = (char *)dynArr->arr + idx * dynArr->dtype_size;
+  assignFunc(element, data);
+  dynArr->size++;
+  return 0;
+}
+
+int DynArr_popback_custom(struct DynArr *dynArr, CustomFunc freeFunc, AssignFunc assignFunc) {
+  if (dynArr->dtype != DT_CUSTOM) return -1;
+  if (dynArr->capacity == 0 || dynArr->size == 0) return -2;
+
+  unsigned long idx = dynArr->size - 1;
+  void *element = (char *)dynArr->arr + idx * dynArr->dtype_size;
+  if (freeFunc != NULL) freeFunc(element);
+
+  dynArr->size--;
+  if (dynArr->size < dynArr->capacity / 4 && 
+      DynArr_expand_custom(dynArr, dynArr->capacity / 2, assignFunc) < 0) 
+    return -3;
+
+  return 0;
 }
 
 

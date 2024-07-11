@@ -175,9 +175,6 @@ void DataType_assign(enum DataType dtype, void *element, void *data) {
     case DT_CHAR: 
       *((char *) element) = *((char *) data);
       break;
-    case DT_CUSTOM:
-      *((void **) element) = data;
-      break;
     case DT_INT: 
       *((int *) element) = *((int *) data);
       break;
@@ -195,6 +192,38 @@ void DataType_assign(enum DataType dtype, void *element, void *data) {
       break;
     case DT_UNSIGNED_LONG:
       *((unsigned long *)element) = *((unsigned long *) data);
+      break;
+    default: 
+      printf("Custom not supported\n");
+      break;
+  }
+}
+
+void DataType_zero(enum DataType dtype, void *data) {
+  switch (dtype) {
+    case DT_CHAR: 
+      *((char *) data) = 0;
+      break;
+    case DT_INT: 
+      *((int *) data) = 0;
+      break;
+    case DT_FLOAT:
+      *((float *) data) = 0;
+      break;
+    case DT_LONG: 
+      *((long *) data) = 0;
+      break;
+    case DT_DOUBLE:
+      *((double *) data) = 0;
+      break;
+    case DT_UNSIGNED_INT:
+      *((unsigned int *) data) = 0;
+      break;
+    case DT_UNSIGNED_LONG:
+      *((unsigned long *) data) = 0;
+      break;
+    default: 
+      printf("Custom not supported");
       break;
   }
 }

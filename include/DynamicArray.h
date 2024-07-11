@@ -17,18 +17,17 @@ int DynArr_expand(struct DynArr *dynArr, unsigned long cap);
 int DynArr_pushback(struct DynArr *dynArr, void *data);
 int DynArr_popback(struct DynArr *dynArr);
 int DynArr_insertAt(struct DynArr *dynArr, void *data, unsigned long idx);
-const void *DynArr_dataAt(struct DynArr *dynArr, unsigned long idx);
+void *DynArr_dataAt(struct DynArr *dynArr, unsigned long idx);
 void DynArr_print(struct DynArr *dynArr);
 void DynArr_sort(struct DynArr *dynArr, unsigned long begin, unsigned long end, int (*cmp_func)(void *, void*));
 
 
 int DynArr_init_custom(struct DynArr *dynArr, unsigned long initialSize, unsigned long dTypeSize);
+int DynArr_expand_custom(struct DynArr *dynArr, unsigned long cap, AssignFunc assignFunc);
 int DynArr_clear_custom(struct DynArr *dynArr, CustomFunc freeFunc);
-int DynArr_expand_custom(struct DynArr *dynArr, unsigned long cap, CustomFunc allocFunc);
-int DynArr_pushback_custom(struct DynArr *dynArr, void *data, CustomFunc allocFunc);
-int DynArr_popback_custom(struct DynArr *dynArr, CustomFunc freeFunc);
+int DynArr_pushback_custom(struct DynArr *dynArr, void *data, AssignFunc assignFunc);
+int DynArr_popback_custom(struct DynArr *dynArr, CustomFunc freeFunc, AssignFunc assignFunc);
 int DynArr_insertAt_custom(struct DynArr *dynArr, void *data, unsigned long idx, AssignFunc assignFunc);
-const void *DynArr_dataAt_custom(struct DynArr *dynArr, unsigned long idx);
 void DynArr_print_custom(struct DynArr *dynArr, CustomFunc printFunc);
 
 
