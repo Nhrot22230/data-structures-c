@@ -10,7 +10,8 @@ void List_init(struct List *list, enum DataType dtype){
 }
 
 void List_insert(struct List *list, void *data, unsigned long idx) {
-  struct Node *node = Node_create(data, list->dtype);
+  struct Node *node = Node_create();
+  Node_init(node, data, list->dtype);
   if (node == NULL) return;
   if (list->head == NULL) {
     list->head = node;
@@ -39,7 +40,6 @@ void List_insert(struct List *list, void *data, unsigned long idx) {
   list->len++;
 }
 
-
 void List_erase(struct List *list, unsigned long idx) {
   if (list->head == NULL) return;
   if (list->len == 0) return;
@@ -66,8 +66,7 @@ void List_erase(struct List *list, unsigned long idx) {
 
   
   if (aux == NULL) return;
-  aux->next = NULL;
-  Node_free(aux);
+  Node_free(aux, 0);
   free(aux);
 }
 
@@ -86,7 +85,7 @@ void List_print(struct List *list) {
 
 void List_free(struct List *list){
   if (list->head != NULL) {
-    Node_free(list->head);
+    Node_free(list->head, 1);
     free(list->head);
     list->head = NULL;
   }
