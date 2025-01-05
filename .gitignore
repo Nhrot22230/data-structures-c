@@ -1,0 +1,6 @@
+# Builded files
+build
+build/*
+*.o
+*.so
+*.a
